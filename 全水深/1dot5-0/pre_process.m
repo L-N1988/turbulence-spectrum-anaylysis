@@ -7,7 +7,7 @@ clc; clear; close all;
 %------------------------------------------------------------------------%
 
 % before running, add mat file path here!!!
-matPath = '.\1dot5-0-C\';
+matPath = '.\1dot5-0-L\';
 data = load(strcat(matPath, 'PIVlab.mat'));
 % vector, 2d plane coGrdinate values
 Y = data.y{1, 1}(:, 1);

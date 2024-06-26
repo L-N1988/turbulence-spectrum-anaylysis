@@ -7,7 +7,7 @@ clc; clear; close all;
 %------------------------------------------------------------------------%
 
 % before running, add mat file path here!!!
-matPath = '.\01h-L\';
+matPath = '.\01h-C\';
 data = load(strcat(matPath, 'PIVlab.mat'));
 % vector, 2d plane coordinate values
 Y = data.y{1, 1}(:, 1);
@@ -47,7 +47,7 @@ vSum = zeros(my, nx);
 for k = 1:lt
 	for i = 1:my
 		for j = 1:nx
-			if plane_nomask(i, j)
+			if plane_nomask(i, j) && ~isnan(u_filtered{k}(i, j) + v_filtered{k}(i, j))
 				tCnt(i, j) = tCnt(i, j) + 1; % snapshot numbers of each valid cell
 			else
 				% remove masked cells

@@ -124,7 +124,7 @@ uuu_xt = mean(uuu ./ tCnt, 2); % u'u'u' third moment of u
 %------------------------------------------------------------------------%
 center = [floor(my / 2) + 1, floor(nx / 2) + 1];
 if contains(matPath, 'C')
-    Fs = 350;
+    Fs = 250;
     window_len = [];
     spectrum_mat = 'pxx_f-C.mat';
 elseif contains(matPath, 'L')

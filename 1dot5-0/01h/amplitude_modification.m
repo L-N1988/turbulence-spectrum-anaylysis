@@ -233,6 +233,7 @@ set(ax, 'XScale', 'log', ... % Set X-axis to logarithmic scale
 set(xlabel("$f$ (Hz)"), 'Interpreter', 'latex'); 
 set(ylabel("$S_{uu}(f) (\rm m^2/s)$"), 'Interpreter', 'latex');
 set(title("PSD from Merged Signal"), 'Interpreter', 'latex');
+xlim([1e-3 1e3]);
 
 figure('Position', [10 10 1000 618]);
 plot(positive_frequencies, positive_frequencies .* pxx_positive);
