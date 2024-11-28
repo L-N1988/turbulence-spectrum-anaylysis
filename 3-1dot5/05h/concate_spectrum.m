@@ -21,7 +21,7 @@ data_C = load(fullfile(matPath_C, 'pxx_f-C.mat'));
 data_L = load(fullfile(matPath_L, 'pxx_f-L.mat'));
 pxx_C = data_C.pxx; f_C = data_C.f;
 pxx_L = data_L.pxx; f_L = data_L.f;
-noise_f = 0.072:0.072:2; % 3:1.5转速比
+noise_f = 0.075:0.075:1; % 3:1.5转速比
 
 concate_pxx = [pxx_L(f_L < cutedge); pxx_C(f_C >= cutedge)];
 concate_f = [f_L(f_L < cutedge); f_C(f_C >= cutedge)];

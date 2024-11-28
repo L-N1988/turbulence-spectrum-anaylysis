@@ -77,7 +77,7 @@ parfor ipxx = 1:length(data.concate_pxxs)
 
     grid on; 
     set(gca, 'XScale', 'log'); set(gca, 'YScale', 'log'); 
-    set(gca, 'FontSize', 16);
+    set(gca, 'FontSize', 22);
     set(xlabel("$k (\rm m^{-1})$"), 'Interpreter', 'latex'); 
     set(ylabel("$S_{uu}(k) (\rm m^3/s^2)$"), 'Interpreter', 'latex');
     figtitle = sprintf("PSD at y=%.4f m", Y);
@@ -99,7 +99,7 @@ parfor ipxx = 1:length(data.concate_pxxs)
     emds{ipxx} = smoothdata(reconstrct, smooth_window{:});
     % ylim([0, 5.5E-5]);
 
-    grid on; set(gca, 'XScale', 'log'); set(gca, 'FontSize', 16); %set(gca, 'YScale', 'log'); 
+    grid on; set(gca, 'XScale', 'log'); set(gca, 'FontSize', 22); %set(gca, 'YScale', 'log'); 
     set(xlabel("$k (\rm m^{-1})$"), 'Interpreter', 'latex'); 
     set(ylabel("$kS_{uu}(k) (\rm m^2/s^2)$"), 'Interpreter', 'latex');
     figtitle = sprintf("pre-multiplied PSD at y=%.4f m", Y);

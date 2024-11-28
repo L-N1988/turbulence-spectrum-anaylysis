@@ -47,6 +47,7 @@ pxx_denoise = pxx(valid);
 [imf,residual] = emd(pxx_denoise);
 reconstrct = sum(imf(:, end-nmode:end), 2) + residual;
 
+%% PSD
 psd_fig = figure('Position', [10 10 1000 618]);
 p1 = plot(f, pxx, 'Color', gray);
 hold on
@@ -54,22 +55,49 @@ hold on
 p2 = plot(f_denoise, ...
     pxx_denoise, ...
     'Color', blue);
-p3 = plot(f_denoise, ...
-    smoothdata(reconstrct, smooth_window{:}), ...
-    'Color', yellow, LineWidth=2);
+% p3 = plot(f_denoise, ...
+%     smoothdata(reconstrct, smooth_window{:}), ...
+%     'Color', yellow, LineWidth=2);
 % reference lines
 p4 = xline(noise_f(noise_f <= 1), '-.');
 
+xlim([1e-3 1e3]);
+ylim([1e-10, 1e-2]);
 grid on; 
 set(gca, 'XScale', 'log'); set(gca, 'YScale', 'log'); 
-set(gca, 'FontSize', 16);
+set(gca, 'FontSize', 22, 'TickLabelInterpreter', 'latex');
 set(xlabel("$f$ (Hz)"), 'Interpreter', 'latex'); 
 set(ylabel("$S_{uu}(f) (\rm m^2/s)$"), 'Interpreter', 'latex');
-set(title("PSD"), 'Interpreter', 'latex');
-legend([p1, p2, p3], {'raw', 'denoised', 'EMD'}, "FontSize", 12);
+% set(title("PSD"), 'Interpreter', 'latex');
+% legend([p1, p2, p3], {'raw', 'denoised', 'EMD'}, "FontSize", 22);
+legend([p1, p2], {'raw $S_{uu}$', 'denoised $S_{uu}$'}, "FontSize", 22, 'Interpreter', 'latex');
 saveas(psd_fig, 'PSD-concate.eps', 'epsc');
+saveas(psd_fig, 'PSD-concate.svg', 'svg');
 savefig(psd_fig, 'PSD-concate.fig');
 
+%% plot wave length spectrum
+H = 0.15; % water depth 15cm
+pre_psd_lamb = figure('Position', [10 10 1000 618]);
+hold on
+pre2_lamb = plot((U ./ f_denoise) / H, ...
+    f_denoise .* pxx_denoise, ...
+    'Color', blue);
+pre3_lamb = plot((U ./ f_denoise) / H, ...
+    f_denoise .* smoothdata(reconstrct, smooth_window{:}), ...
+    'Color', maroon, LineWidth=3);
+
+xlim([1e-2 1e3]);
+grid on; set(gca, 'XScale', 'log'); set(gca, 'FontSize', 22, 'TickLabelInterpreter', 'latex'); %set(gca, 'YScale', 'log'); 
+set(xlabel("${\lambda}/{H}$"), 'Interpreter', 'latex'); 
+set(ylabel("$kS_{uu}(k) (\rm m^2/s^2)$"), 'Interpreter', 'latex');
+% set(title("pre-multiplied PSD"), 'Interpreter', 'latex');
+% legend([pre2, pre3], {'denoised', 'EMD'}, "FontSize", 22);
+legend(pre3_lamb, {'fitted line'}, "FontSize", 22, 'Interpreter', 'latex');
+saveas(pre_psd_lamb, 'pre-PSD-concate-lamb.eps', 'epsc');
+saveas(pre_psd_lamb, 'pre-PSD-concate-lamb.svg', 'svg');
+savefig(pre_psd_lamb, 'pre-PSD-concate-lamb.fig');
+
+%% pre PSD
 pre_psd = figure('Position', [10 10 1000 618]);
 hold on
 pre2 = plot(f_denoise, ...
@@ -79,7 +107,7 @@ pre3 = plot(f_denoise, ...
     f_denoise .* smoothdata(reconstrct, smooth_window{:}), ...
     'Color', yellow, LineWidth=2);
 
-grid on; set(gca, 'XScale', 'log'); set(gca, 'FontSize', 16); %set(gca, 'YScale', 'log'); 
+grid on; set(gca, 'XScale', 'log'); set(gca, 'FontSize', 22); %set(gca, 'YScale', 'log'); 
 set(xlabel("$f$ (Hz)"), 'Interpreter', 'latex'); 
 set(ylabel("$fS_{uu}(f) (\rm m^2/s^2)$"), 'Interpreter', 'latex');
 set(title("pre-multiplied PSD"), 'Interpreter', 'latex');
@@ -87,7 +115,7 @@ legend([pre2, pre3], {'denoised', 'EMD'}, "FontSize", 12);
 saveas(pre_psd, 'pre-PSD-concate.eps', 'epsc');
 savefig(pre_psd, 'pre-PSD-concate.fig');
 
-% plot wave number spectrum
+%% plot wave number spectrum
 H = 0.15; % water depth 15cm
 pre_psd_k = figure('Position', [10 10 1000 618]);
 hold on
@@ -98,7 +126,7 @@ pre3 = plot(f_denoise / U * H, ...
     f_denoise .* smoothdata(reconstrct, smooth_window{:}) / urms^2, ...
     'Color', yellow, LineWidth=2);
 
-grid on; set(gca, 'XScale', 'log'); set(gca, 'FontSize', 16); %set(gca, 'YScale', 'log'); 
+grid on; set(gca, 'XScale', 'log'); set(gca, 'FontSize', 22); %set(gca, 'YScale', 'log'); 
 set(xlabel("$kH$"), 'Interpreter', 'latex'); 
 set(ylabel("$kS_{uu}(k)/u_{\mathrm{rms}}^2$"), 'Interpreter', 'latex');
 set(title("pre-multiplied PSD"), 'Interpreter', 'latex');

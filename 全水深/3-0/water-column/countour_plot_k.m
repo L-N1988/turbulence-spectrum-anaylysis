@@ -69,7 +69,7 @@ set(gca, 'XScale', 'log'); set(gca, 'FontSize', 16); %set(gca, 'YScale', 'log');
 set(xlabel("$kH$"), 'Interpreter', 'latex'); 
 set(ylabel("$z(\rm m)$"), 'Interpreter', 'latex');
 set(ylabel(col, "$kS_{uu}(k)/u_{\mathrm{rms}}^2$"), 'Interpreter', 'latex');
-xlim([1e-2, 1e2]);
+% xlim([1e-2, 1e2]);
 saveas(con2, 'PSD_contour-k-dimensionless.eps', 'epsc');
 savefig(con2, 'PSD_contour-k-dimensionless.fig');
 print(con2,'PSD_contour-k-dimensionless.jpg','-djpeg','-r300');

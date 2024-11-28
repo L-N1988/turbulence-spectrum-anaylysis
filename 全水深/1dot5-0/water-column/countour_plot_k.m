@@ -16,7 +16,7 @@ H = 0.15; % water depth 15 cm
 y_data = repmat(Ys, 1, length(pxxs{1}));
 y_data = y_data.'; % hate weird symbols
 y_data = y_data(:); % convert to 1d vector
-x_data = double(cell2mat(ks));
+x_data = double(cell2mat(ks)); % wave number FIXME: 这里少乘了一个2pi
 f = cell2mat(fs);
 z_data = cell2mat(pxxs); z_data = z_data .* f;
 
@@ -69,7 +69,7 @@ set(gca, 'XScale', 'log'); set(gca, 'FontSize', 16); %set(gca, 'YScale', 'log');
 set(xlabel("$kH$"), 'Interpreter', 'latex'); 
 set(ylabel("$z(\rm m)$"), 'Interpreter', 'latex');
 set(ylabel(col, "$kS_{uu}(k)/u_{\mathrm{rms}}^2$"), 'Interpreter', 'latex');
-xlim([1e-2, 1e2]);
+% xlim([1e-2, 1e2]);
 saveas(con2, 'PSD_contour-k-dimensionless.eps', 'epsc');
 savefig(con2, 'PSD_contour-k-dimensionless.fig');
 print(con2,'PSD_contour-k-dimensionless.jpg','-djpeg','-r300');

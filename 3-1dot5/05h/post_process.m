@@ -21,9 +21,9 @@ f = data.concate_f;
 flim = 2;
 % basic arguments
 neps = 5;
-nmode = 8;
+nmode = 6;
 smooth_window = {"gaussian", 200};
-noise_f = 0.072:0.072:2; % 3:1.5转速比
+noise_f = 0.075:0.075:1; % 3:1.5转速比
 
 % eps = max(abs(diff(f(f<flim)))) * neps; % threshold is 10
 valid = zeros(size(f));

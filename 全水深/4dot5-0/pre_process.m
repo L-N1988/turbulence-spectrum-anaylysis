@@ -47,7 +47,9 @@ vSum = zeros(my, nx);
 for k = 1:lt
 	for i = 1:my
 		for j = 1:nx
-			if plane_nomask(i, j)
+			if plane_nomask(i, j) ...
+                    && ~isnan(u_filtered{k}(i, j))...
+                    && ~isnan(v_filtered{k}(i, j))
 				tCnt(i, j) = tCnt(i, j) + 1; % snapshot numbers of each valid cell
 			else
 				% remove masked cells
