@@ -9,8 +9,8 @@ Ys = data.Ys(3:end);
 pxxs = data.emds(3:end);
 fs = data.fs_denoise(3:end);
 ks = data.ks_denoise(3:end);
-urms = data.urms; urms = urms(2:end-1);
-urms = urms(3:end);
+% urms = data.urms; urms = urms(2:end-1);
+% urms = urms(3:end);
 H = 0.15; % water depth 15 cm
 omega_t = 4.5;
 u_lid = 2*pi/60*3.3/2 * omega_t;
@@ -27,7 +27,7 @@ assert(length(y_data) == length(x_data));
 assert(length(x_data) == length(z_data));
 
 %% Create regular grid across data space
-xscale = 0.1; yscale = 100; % increase point density
+xscale = 0.008; yscale = 100; % increase point density
 xgrid = logspace(log10(min(x_data)), log10(max(x_data)), length(pxxs{1})*xscale);
 ygrid = linspace(min(y_data), max(y_data), length(Ys)*yscale);
 [Xmesh,Ymesh] = meshgrid(xgrid, ygrid);
@@ -37,8 +37,8 @@ Zmesh = griddata(x_data,y_data,z_data,Xmesh,Ymesh);
 % dimension wave number spectrum
 con = figure('Position', [10 10 1000 618]);
 % SEE: https://stackoverflow.com/a/44817243/18736354
-contourf(Xmesh ./ H, Ymesh ./ H, Zmesh ./ u_lid^2, 20, 'LineStyle', 'none');
-colormap(jet);
+contourf(Xmesh ./ H, Ymesh ./ H, Zmesh ./ u_lid^2, 10, 'LineStyle', '--');
+colormap("sky");
 col = colorbar();
 
 xlim([1e-2 1e3]);
@@ -65,13 +65,13 @@ set(ylabel("$z/H$"), 'Interpreter', 'latex');
 % set(ylabel(col, "$kS_{uu}(k) (\rm m^2/s^2)$"), 'Interpreter', 'latex');
 set(ylabel(col, "$kS_{uu}(k)/U_{lid}^2$"), 'Interpreter', 'latex');
 
-saveas(con, 'PSD_contour-lambda.eps', 'epsc');
 savefig(con, 'PSD_contour-lambda.fig');
-saveas(con, 'PSD_contour-lambda.svg', 'svg');
+print('PSD_contour-lambda', '-dsvg', '-vector');
+print('PSD_contour-lambda', '-depsc', '-vector');
 print(con,'PSD_contour-lambda.jpg','-djpeg','-r500');
 
 yline([0.1, 0.5, 0.9], '--', 'LineWidth', 3, 'Color', 'w');
-saveas(con, 'PSD_contour-lambda-yline.eps', 'epsc');
 savefig(con, 'PSD_contour-lambda-yline.fig');
-saveas(con, 'PSD_contour-lambda-yline.svg', 'svg');
+print('PSD_contour-lambda-yline', '-dsvg', '-vector');
+print('PSD_contour-lambda-yline', '-depsc', '-vector');
 print(con,'PSD_contour-lambda-yline.jpg','-djpeg','-r500');

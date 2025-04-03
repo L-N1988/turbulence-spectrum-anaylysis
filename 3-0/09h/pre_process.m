@@ -7,7 +7,7 @@ clc; clear; close all;
 %------------------------------------------------------------------------%
 
 % before running, add mat file path here!!!
-matPath = '.\09h-C\';
+matPath = '.\09h-L\';
 data = load(strcat(matPath, 'PIVlab.mat'));
 % vector, 2d plane coordinate values
 Y = data.y{1, 1}(:, 1);
@@ -118,6 +118,8 @@ vv_xt = mean(vv ./ tCnt, 2); % v'v' TKE of v
 u_rms = mean(sqrt(uu ./ tCnt), 2); % turbulence strength of u
 v_rms = mean(sqrt(vv ./ tCnt), 2); % turbulence strength of v
 uuu_xt = mean(uuu ./ tCnt, 2); % u'u'u' third moment of u
+
+assemable = [Y, U_xt, V_xt, uv_xt, uu_xt, vv_xt, u_rms, v_rms];
 
 %------------------------------------------------------------------------%
 % spectrum analysis

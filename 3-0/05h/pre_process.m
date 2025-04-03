@@ -7,7 +7,7 @@ clc; clear; close all;
 %------------------------------------------------------------------------%
 
 % before running, add mat file path here!!!
-matPath = '.\05h-C\';
+matPath = '.\05h-L\';
 data = load(strcat(matPath, 'PIVlab.mat'));
 % vector, 2d plane coordinate values
 Y = data.y{1, 1}(:, 1);
@@ -47,7 +47,7 @@ vSum = zeros(my, nx);
 for k = 1:lt
 	for i = 1:my
 		for j = 1:nx
-			if plane_nomask(i, j)
+			if plane_nomask(i, j) && ~isnan(u_filtered{k}(i, j) + v_filtered{k}(i, j))
 				tCnt(i, j) = tCnt(i, j) + 1; % snapshot numbers of each valid cell
 			else
 				% remove masked cells
@@ -119,12 +119,14 @@ u_rms = mean(sqrt(uu ./ tCnt), 2); % turbulence strength of u
 v_rms = mean(sqrt(vv ./ tCnt), 2); % turbulence strength of v
 uuu_xt = mean(uuu ./ tCnt, 2); % u'u'u' third moment of u
 
+assemable = [Y, U_xt, V_xt, uv_xt, uu_xt, vv_xt, u_rms, v_rms];
+
 %------------------------------------------------------------------------%
 % spectrum analysis
 %------------------------------------------------------------------------%
 center = [floor(my / 2) + 1, floor(nx / 2) + 1];
 if contains(matPath, 'C')
-    Fs = 150;
+    Fs = 250;
     window_len = [];
     spectrum_mat = 'pxx_f-C.mat';
 elseif contains(matPath, 'L')

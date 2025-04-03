@@ -129,6 +129,8 @@ u_pri_01h = cellfun(@(x) x(iy_01h, floor(nx / 2) + 1), u_pri);
 u_rms_09h = u_rms(iy_09h);
 u_rms_05h = u_rms(iy_05h);
 u_rms_01h = u_rms(iy_01h);
+
+assemable = [Y, U_xt, V_xt, uv_xt, uu_xt, vv_xt, u_rms, v_rms];
 %------------------------------------------------------------------------%
 % spectrum analysis
 %------------------------------------------------------------------------%

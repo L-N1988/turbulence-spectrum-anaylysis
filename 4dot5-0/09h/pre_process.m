@@ -119,6 +119,8 @@ u_rms = mean(sqrt(uu ./ tCnt), 2); % turbulence strength of u
 v_rms = mean(sqrt(vv ./ tCnt), 2); % turbulence strength of v
 uuu_xt = mean(uuu ./ tCnt, 2); % u'u'u' third moment of u
 
+assemable = [Y, U_xt, V_xt, uv_xt, uu_xt, vv_xt, u_rms, v_rms];
+
 %------------------------------------------------------------------------%
 % spectrum analysis
 %------------------------------------------------------------------------%
