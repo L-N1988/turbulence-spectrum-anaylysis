@@ -138,9 +138,9 @@ p1 = scatter(u1 / u_t(1), z1 / H, 80, colors.green, "o");
 p2 = scatter(u2 / u_t(2), z2 / H, 80, colors.blue, "^");
 p3 = scatter(u3 / u_t(3), z3 / H, 80, colors.red, "square");
 
-scatter(u_h(:, 2) / u_t(1), u_h(:, 1) / H, 100, colors.green, 'filled', "o");
-scatter(u_h(:, 3) / u_t(2), u_h(:, 1) / H, 100, colors.blue, 'filled', "^");
-scatter(u_h(:, 4) / u_t(3), u_h(:, 1) / H, 100, colors.red, 'filled', "square");
+% scatter(u_h(:, 2) / u_t(1), u_h(:, 1) / H, 100, colors.green, 'filled', "o");
+% scatter(u_h(:, 3) / u_t(2), u_h(:, 1) / H, 100, colors.blue, 'filled', "^");
+% scatter(u_h(:, 4) / u_t(3), u_h(:, 1) / H, 100, colors.red, 'filled', "square");
 
 set(gca, 'FontSize', 22, 'TickLabelInterpreter', 'latex');
 set(xlabel("$\left \langle \overline{u} \right \rangle/U_{lid}$"), 'Interpreter', 'latex'); 
@@ -149,7 +149,7 @@ hLg = legend({'1.5 rpm', '3.0 rpm', '4.5 rpm'}, 'Location', 'best', "FontSize", 
 % title(hLg, '$\omega_t$', 'Interpreter','latex');
 % set(hLg, 'Box', 'off');
 ylim([0, 1]); % xlim([0 1]);
-set(gca, 'YScale', 'log');
+% set(gca, 'YScale', 'log');
 
 % hold off
 saveas(fig, 'averageU.eps', 'epsc');

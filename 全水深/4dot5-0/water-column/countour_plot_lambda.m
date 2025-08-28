@@ -33,7 +33,7 @@ ygrid = linspace(min(y_data), max(y_data), length(Ys)*yscale);
 [Xmesh,Ymesh] = meshgrid(xgrid, ygrid);
 Zmesh = griddata(x_data,y_data,z_data,Xmesh,Ymesh);
 
-%% create contour plot
+%% create contour plot for article
 % dimension wave number spectrum
 con = figure('Position', [10 10 1000 618]);
 % SEE: https://stackoverflow.com/a/44817243/18736354
@@ -75,3 +75,39 @@ savefig(con, 'PSD_contour-lambda-yline.fig');
 print('PSD_contour-lambda-yline', '-dsvg', '-vector');
 print('PSD_contour-lambda-yline', '-depsc', '-vector');
 print(con,'PSD_contour-lambda-yline.jpg','-djpeg','-r500');
+
+%% create contour plot for cover aspect ratio 1.2 : 1
+% dimension wave number spectrum
+con = figure('Position', [10 10 1200 1000]);
+% SEE: https://stackoverflow.com/a/44817243/18736354
+contourf(Xmesh ./ H, Ymesh ./ H, Zmesh ./ u_lid^2, 10, 'LineStyle', '--');
+colormap("sky");
+col = colorbar();
+
+xlim([1e-2 1e3]);
+set(gca, 'XScale', 'log');  %set(gca, 'YScale', 'log'); 
+xaxisproperties= get(gca, 'XAxis');
+xaxisproperties.TickLabelInterpreter = 'latex'; % latex for x-axis
+yaxisproperties= get(gca, 'YAxis');
+yaxisproperties.TickLabelInterpreter = 'latex'; % latex for y-axis
+
+% Set custom x-tick positions and labels
+xtick_positions = 10.^(-2:1:3); % Tick positions
+xticks(xtick_positions);
+xticklabels(arrayfun(@(x) sprintf('$10^{%d}$', log10(x)), xtick_positions, 'UniformOutput', false));
+
+% Set custom y-tick positions and labels
+ytick_positions = 0.1:0.2:0.9; % Tick positions
+yticks(ytick_positions);
+yticklabels(arrayfun(@(y) sprintf('$%.1f$', y), ytick_positions, 'UniformOutput', false));
+
+set(gca, 'FontSize', 22);
+set(col, 'TickLabelInterpreter', 'latex');
+set(xlabel("$\lambda/H$"), 'Interpreter', 'latex'); 
+set(ylabel("$z/H$"), 'Interpreter', 'latex');
+% set(ylabel(col, "$kS_{uu}(k) (\rm m^2/s^2)$"), 'Interpreter', 'latex');
+set(ylabel(col, "$kS_{uu}(k)/U_{lid}^2$"), 'Interpreter', 'latex');
+
+% savefig(con, 'PSD_contour-lambda.fig');
+print('PSD_contour-lambda-cover', '-dsvg', '-vector');
+% print(con,'PSD_contour-lambda-cover.jpg','-djpeg','-r300');
