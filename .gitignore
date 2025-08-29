@@ -1,6 +1,8 @@
 *.mat
-*.eps
 *.fig
+全水深/**/*.eps
+**/spanwise-contour/concate_figures-k/
+**/spanwise-contour/figures-k/
 *.asv
 *.zip
 *.xlsx
