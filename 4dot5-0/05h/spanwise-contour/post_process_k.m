@@ -37,7 +37,7 @@ parfor ipxx = 1:length(data.concate_pxxs)
     Y = Ys(ipxx);
 
     neps = 10; nmode = 8;
-    smooth_window = {"gaussian", 200};
+    smooth_window = {"gaussian", 400};
     flim = 3; noise_f = 0.075:0.075:flim; % 4.5:0转速比
 
     valid = zeros(size(f));

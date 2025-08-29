@@ -10,7 +10,7 @@ maroon = [0.6350 0.0780 0.1840];
 gray   = [0.5020 0.5020	0.5020];
 
 %------------------------------------------------------------------------%
-% read data
+%% read data
 %------------------------------------------------------------------------%
 
 % before running, add mat file path here!!!
@@ -20,13 +20,23 @@ pxxs_denoise = cell(length(data.concate_pxxs), 1);
 fs_denoise = cell(length(data.concate_pxxs), 1);
 ks_denoise = cell(length(data.concate_pxxs), 1);
 emds = cell(length(data.concate_pxxs), 1);
-Ys = data.concate_Ys; U_C = data.U_C; U_L = data.U_L;
 
-for ipxx = 1:length(data.concate_pxxs)
-    pxx = data.concate_pxxs{ipxx};
-    f = data.concate_fs{ipxx};
-    k = data.concate_ks{ipxx};
-    Y = data.concate_Ys(ipxx);
+Ys = data.concate_Ys;
+U_C = data.U_C; U_L = data.U_L;
+urms = data.concate_urms;
+concate_pxxs = data.concate_pxxs;
+concate_fs = data.concate_fs;
+concate_ks = data.concate_ks;
+
+if ~exist("concate_figures-k", 'dir')
+   mkdir("concate_figures-k")
+end
+
+parfor ipxx = 1:length(data.concate_pxxs)
+    pxx = concate_pxxs{ipxx};
+    f = concate_fs{ipxx};
+    k = concate_ks{ipxx};
+    Y = Ys(ipxx);
 
     neps = 10; nmode = 8;
     smooth_window = {"gaussian", 200};
@@ -41,15 +51,20 @@ for ipxx = 1:length(data.concate_pxxs)
     f_denoise = f(valid);
     k_denoise = k(valid);
     pxx_denoise = pxx(valid);
+    
     % store denoised values
     fs_denoise{ipxx} = f_denoise;
     ks_denoise{ipxx} = k_denoise;
     pxxs_denoise{ipxx} = pxx_denoise;
 
-    % % EMD smooth data
+    % EMD smooth data
     [imf,residual] = emd(pxx_denoise);
-    reconstrct = sum(imf(:, end-nmode:end), 2) + residual;
-
+    if nmode < size(imf, 2)
+        reconstrct = sum(imf(:, end-nmode:end), 2) + residual;
+    else
+        reconstrct = sum(imf(:, 2:end), 2) + residual;
+    end
+    
     psd_fig = figure('Position', [10 10 1000 618]);
     p1 = plot(k, pxx, 'Color', gray);
     hold on
@@ -59,7 +74,7 @@ for ipxx = 1:length(data.concate_pxxs)
         smoothdata(reconstrct, smooth_window{:}), ...
         'Color', yellow, LineWidth=2);
     % reference lines
-    p4 = xline(noise_f ./ U_L, '-.');
+    p4 = xline(noise_f ./ U_L(ipxx), '-.');
     % ylim([0.7E-8, 1E-2]);
 
     grid on; 
@@ -79,8 +94,8 @@ for ipxx = 1:length(data.concate_pxxs)
 
     pre_psd = figure('Position', [10 10 1000 618]);
     hold on
-    pre2 = plot(f_denoise, f_denoise .* pxx_denoise, 'Color', blue);
-    pre3 = plot(f_denoise, ...
+    pre2 = plot(k_denoise, f_denoise .* pxx_denoise, 'Color', blue);
+    pre3 = plot(k_denoise, ...
         f_denoise .* smoothdata(reconstrct, smooth_window{:}), ...
         'Color', yellow, LineWidth=2);
     emds{ipxx} = smoothdata(reconstrct, smooth_window{:});
@@ -100,4 +115,4 @@ for ipxx = 1:length(data.concate_pxxs)
     close(pre_psd);
 end
 
-save("denoise_concate_pxx_k.mat", "ks_denoise", "fs_denoise", "pxxs_denoise", "Ys", "emds", "U_C", "U_L");
+save("denoise_concate_pxx_k.mat", "ks_denoise", "fs_denoise", "pxxs_denoise", "Ys", "emds", "U_C", "U_L", "urms");

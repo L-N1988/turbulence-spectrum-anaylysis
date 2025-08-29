@@ -42,7 +42,7 @@ parfor ipxx = 1:length(Y_C)
 
     concate_pxx = [pxx_L(f_L < cutedge); pxx_C(f_C >= cutedge)];
     concate_f = [f_L(f_L < cutedge); f_C(f_C >= cutedge)];
-    concate_k = [f_L(f_L < cutedge) ./ U_L(ipxx); f_C(f_C >= cutedge) ./ U_C(ipxx)];
+    concate_k = 2 * pi * [f_L(f_L < cutedge) ./ U_L(ipxx); f_C(f_C >= cutedge) ./ U_C(ipxx)];
     concate_pxxs{ipxx} = concate_pxx;
     concate_fs{ipxx} = concate_f;
     concate_ks{ipxx} = concate_k;

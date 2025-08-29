@@ -41,13 +41,15 @@ uSum = zeros(my, nx);
 vSum = zeros(my, nx);
 
 %------------------------------------------------------------------------%
-% clean data
+%% clean data
 %------------------------------------------------------------------------%
 
 for k = 1:lt
 	for i = 1:my
 		for j = 1:nx
-			if plane_nomask(i, j)
+			if plane_nomask(i, j) ...
+                    && ~isnan(u_filtered{k}(i, j))...
+                    && ~isnan(v_filtered{k}(i, j))
 				tCnt(i, j) = tCnt(i, j) + 1; % snapshot numbers of each valid cell
 			else
 				% remove masked cells
@@ -59,8 +61,8 @@ for k = 1:lt
 end
 
 %------------------------------------------------------------------------%
-% statistic process
-% READ FIRST: https://www.mit.edu/course/1/1.061/www/dream/SEVEN/SEVENTHEORY.PDF
+%% statistic process
+% READ: https://www.mit.edu/course/1/1.061/www/dream/SEVEN/SEVENTHEORY.PDF
 %------------------------------------------------------------------------%
 
 for k = 1:lt
@@ -119,25 +121,26 @@ u_rms = mean(sqrt(uu ./ tCnt), 2); % turbulence strength of u
 v_rms = mean(sqrt(vv ./ tCnt), 2); % turbulence strength of v
 uuu_xt = mean(uuu ./ tCnt, 2); % u'u'u' third moment of u
 
-assemable = [Y, U_xt, V_xt, uv_xt, uu_xt, vv_xt, u_rms, v_rms];
+%------------------------------------------------------------------------%
+%% spectrum analysis
+%------------------------------------------------------------------------%
+if contains(matPath, 'C')
+	Fs = 150;
+	window_len = [];
+	spectrum_mat = 'pxx_f-C-column.mat';
+elseif contains(matPath, 'L')
+	Fs = 24;
+	window_len = [];
+	spectrum_mat = 'pxx_f-L-column.mat';
+end
 
-%------------------------------------------------------------------------%
-% spectrum analysis
-%------------------------------------------------------------------------%
 pxxs = cell(length(Y) - 2, 1);
 fs = cell(length(Y) - 2, 1);
-for iy = 2:length(Y)-1
+local_Ys = zeros(size(fs));
+local_Us = zeros(size(fs));
+parfor iy = 2:length(Y)-1
     center = [iy, floor(nx / 2) + 1];
-	fprintf("PSD at y = %.4f\n", Y(iy));
-	if contains(matPath, 'C')
-		Fs = 150;
-		window_len = [];
-		spectrum_mat = 'pxx_f-C.mat';
-	elseif contains(matPath, 'L')
-		Fs = 24;
-		window_len = [];
-		spectrum_mat = 'pxx_f-L.mat';
-	end
+	fprintf("PSD at z = %.4f\n", Y(iy));
 
 	u_tmp = zeros(lt, 1);
 	pxx = 0; f = 0;
@@ -152,8 +155,8 @@ for iy = 2:length(Y)-1
 	end
 	pxx = pxx ./ 9; f = f ./ 9;
 	pxxs{iy-1} = pxx; fs{iy-1} = f;
+    local_Ys(iy-1) = Y(iy);
+    local_Us(iy-1) = U_xt(iy);
 end
 
-U_half = (U_xt(floor(length(U_xt)/2) + 1)...
-        + U_xt(floor(length(U_xt)/2) + 1)) / 2;
-save(fullfile(matPath, spectrum_mat), "fs", "pxxs", "X", "Y", "U_half");
+save(fullfile(matPath, spectrum_mat), "fs", "pxxs", "local_Ys", "local_Us", "u_rms");
